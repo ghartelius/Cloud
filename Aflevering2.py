@@ -105,10 +105,6 @@ def create_buttons_of_enabled_events(graph_id: str, sim_id: str, auth: (str, str
         #multiple values are just assigned normally
         events = events_json['events']['event']
 
-    #creating sql query to get dcr mail and matching role
-    get_role_query = f"SELECT Role FROM cloud_main.dcrusers WHERE Email = '{auth[0]}'"
-    user_role = execute_query(get_role_query)
-
     # iterating over each event to create and configure buttons
     for e in events:
         #create a custom button for every event
@@ -131,19 +127,7 @@ def create_buttons_of_enabled_events(graph_id: str, sim_id: str, auth: (str, str
             print(f"event {e['@label']} is pending, button color set to orange.") #for debugging
         #to distinguish them from non pending events
         
-        if e['@roles'] == user_role[0]: #checking if the role we get from the enabled events match the one typed as auth
-            #if roles match, we add the custom buttons to the layout
-            button_layout.add_widget(s)
-            print(f"roles match for {e['@label']}, so button is added/updated") #for debuggin
-        else:
-            #if user does not have the required role
-            print(e['@roles'])
-            print(auth[0])
-            print(user_role[0])
-            print(f"user does not have required role to perform event {e['@label']}")
-
-
-        
+        button_layout.add_widget(s)
 
         #this is to show the updates for debuggin
         print(f"Added/Updated button for event {e['@label']}.") 
